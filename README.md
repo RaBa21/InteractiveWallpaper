@@ -19,7 +19,7 @@ pip install Pillow pynput
 ## IMPORTANT!
 - The program has only been tested in Windows 10, so I don't know if it works in other operating systems.
 - If you have other programs that change your wallpaper (e.g. Lively Wallpaper), then please turn them off!
-- Your previous wallpaper won't be back after the program is stopped, so save it somewhere if you haven't alredy!
+- Your previous wallpaper won't be back after the program is stopped, so save it somewhere if you haven't already!
 
 ## Installation
 1. Download and install [Python](https://www.python.org/downloads/)!
