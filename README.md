@@ -12,7 +12,7 @@
 ```bash
 pip install Pillow pynput
 ```
-4. A "main.py" fájlhoz készíts egy parancsikont az asztalra, így bármikor tudod futtatni!
+4. A "run.bat" fájlhoz készíts egy parancsikont az asztalra, így bármikor tudod futtatni! (Ne zárd be a terminál ablakot futtatás után!)
 
 # ENGLISH 🇬🇧
 
@@ -22,10 +22,10 @@ pip install Pillow pynput
 - Your previous wallpaper won't be back after the program is stopped, so save it somewhere if you haven't already!
 
 ## Installation
-1. Download and install [Python](https://www.python.org/downloads/)!
-2. Download and unzip this repo!
+1. Download and install [Python](https://www.python.org/downloads/).
+2. Download and unzip this repo.
 3. Open up a terminal and run the following command:
 ```bash
 pip install Pillow pynput
 ```
-4. Create a shortcut of "main.py" to your desktop so you can run it at any time!
+4. Create a shortcut of "run.bat" to your desktop so you can run it at any time. (Don't close the terminal window after running it.)
