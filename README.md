@@ -8,10 +8,7 @@
 ## Telepítés
 1. Töltsd le és telepítsd a [Pythont](https://www.python.org/downloads/)!
 2. Ezt a repo-t töltsd le és csomagold ki!
-3. Nyiss meg egy parancssort, és írd be a következő parancsot:
-```bash
-pip install Pillow pynput
-```
+3. Futtasd az "install.bat" fájlt!
 4. A "run.bat" fájlhoz készíts egy parancsikont az asztalra, így bármikor tudod futtatni! (Ne zárd be a terminál ablakot futtatás után!)
 
 # ENGLISH 🇬🇧
@@ -24,8 +21,5 @@ pip install Pillow pynput
 ## Installation
 1. Download and install [Python](https://www.python.org/downloads/).
 2. Download and unzip this repo.
-3. Open up a terminal and run the following command:
-```bash
-pip install Pillow pynput
-```
+3. Run the "install.bat" file.
 4. Create a shortcut of "run.bat" to your desktop so you can run it at any time. (Don't close the terminal window after running it.)
