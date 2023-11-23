@@ -1,7 +1,9 @@
 import urllib.request
 import time
+from datetime import datetime
 import ctypes
 import os
+import sys
 import PIL
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance
 from pynput import mouse
@@ -12,7 +14,7 @@ class Wallpaper:
     def __init__(self):
         self.SCREENSIZE = (ctypes.windll.user32.GetSystemMetrics(0), ctypes.windll.user32.GetSystemMetrics(1))
         self.ICONSIZE = 60
-        self.ICONNUM = len(os.listdir("icons"))
+        self.ICONNUM = len(os.listdir("src/icons"))
         l = self.SCREENSIZE[0] / 2 - 350
         u = self.SCREENSIZE[0] / 2 + 350
         self.ICONPOS = lambda idx: (int([l + x * (u - l) / self.ICONNUM for x in range(self.ICONNUM)][idx] + self.ICONSIZE / 2), self.SCREENSIZE[1] - 110)
@@ -109,20 +111,16 @@ class Wallpaper:
         # NAMEDAY #
         ###########
         if self.group == 3:
-            name = "-"
-            try:
-                url = 'http://milyennevnapvanma.szeman.net/nevnap-naptar.php'
-                data = urllib.request.urlopen(url).read().decode('utf-8')
-                month = [
-                    "Január", "Február", "Március", "Április", "Május", "Június", "Július", "Augusztus", "Szeptember",
-                    "Október", "November", "December"
-                ][int(time.strftime("%m")) - 1]
-                day = int(time.strftime("%d"))
-                pattern = f"{month} {day}: <strong>"
-                name = data[data.index(pattern) + len(pattern):].split('<')[0]
-            except: pass
+            day_of_yr = datetime.now().timetuple().tm_yday
+            year = int(time.strftime("%Y"))
+            if not (year%400==0 if year%100==0 else year%4==0):
+                if day_of_yr >= 55:
+                    day_of_yr += 1
+            with open("src/namedays.txt", "r", encoding="utf-8") as file:
+                name = list(file)[day_of_yr-1].strip()
             DATA["nametitle"] = "A mai névnap(ok):"
             DATA["name"] = name
+
 
 
         self.cache[self.group][0] = time.time()
@@ -138,7 +136,7 @@ class Wallpaper:
         img = PIL.Image.new(mode="RGB", size=(300, 200), color=(0, 0, 0))
         drawing = ImageDraw.Draw(img)
 
-        font = ImageFont.truetype('Font.ttf', 15)
+        font = ImageFont.truetype('src/Font.ttf', 15)
         drawing.text((chart_starts_x, 9), str(upper) + " -", font=font, fill=(255, 255, 255), anchor="rm")
         drawing.text((chart_starts_x, 191), str(lower) + " -", font=font, fill=(255, 255, 255), anchor="rm")
 
@@ -192,7 +190,7 @@ class Wallpaper:
                           )
                           )
             else:
-                font = ImageFont.truetype('Font.ttf', v[1])
+                font = ImageFont.truetype('src/Font.ttf', v[1])
                 drawing.text(
                     (
                         (rect[0] + rect[2]) / 2 + v[0][0],
@@ -204,10 +202,10 @@ class Wallpaper:
                     anchor="mm"
                 )
 
-        icons = os.listdir("icons")
+        icons = os.listdir("src/icons")
         idx = 0
         for i in icons:
-            icon = Image.open("icons//" + i)
+            icon = Image.open("src/icons/" + i)
             icon = icon.resize((self.ICONSIZE, self.ICONSIZE))
             if self.group != idx:
                 fil = ImageEnhance.Brightness(icon)
@@ -225,7 +223,7 @@ class Wallpaper:
         return (buf.value in [None, "Program Manager", ""])
 
     def get_icon(self, mouse_infos):
-        group = self.group
+        group = None
         positions = self.ICONPOSLIST
         for num,i in enumerate(positions):
             if mouse_infos[0] > i[0] and mouse_infos[0] < (i[0]+60):
@@ -237,7 +235,7 @@ class Wallpaper:
     def set_bg(self, group):
         self.group = group
         img = self.create_bgimage()
-        img.save(fp="infos.png")
+        img.save(fp="src/infos.png")
         path = "\\".join(__file__.split("\\")[:-1]) + "\\infos.png"
         ctypes.windll.user32.SystemParametersInfoW(20, 0, path, 0)
 
@@ -250,8 +248,18 @@ def on_click(x, y, button, pressed):
         if pressed and button == mouse.Button.left:
             if wp.is_desktop_focused():
                 gr = wp.get_icon((x,y))
-                wp.set_bg(gr)
+                if gr is not None:
+                    wp.set_bg(gr)
     except: pass
 
-with mouse.Listener(on_click=on_click) as listener:
-    listener.join()
+listener = mouse.Listener(on_click=on_click)
+listener.start()
+
+refresh = 0
+try:
+    refresh = float(sys.argv[1])
+except:
+    refresh = 5
+while 1:
+    time.sleep(refresh)
+    wp.set_bg(wp.group)
