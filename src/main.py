@@ -78,7 +78,8 @@ class Wallpaper:
                 url_usd = "https://www.exchangerates.org.uk/USD-HUF-exchange-rate-history.html"
                 symbols = {"eur": "€", "usd": "$"}
                 for m in ["eur", "usd"]:
-                    data = urllib.request.urlopen(eval(f"url_{m}")).read().decode('utf-8')
+                    req = urllib.request.Request(eval(f"url_{m}"), headers={'User-Agent': 'Mozilla/5.0'})
+                    data = urllib.request.urlopen(req).read().decode('utf-8')
                     pattern = f'<td>1 {m.upper()} = '
 
                     money = []
@@ -252,14 +253,16 @@ def on_click(x, y, button, pressed):
                     wp.set_bg(gr)
     except: pass
 
-listener = mouse.Listener(on_click=on_click)
-listener.start()
+with mouse.Listener(on_click=on_click) as listener:
+    listener.join()
 
-refresh = 0
-try:
-    refresh = float(sys.argv[1])
-except:
-    refresh = 5
-while 1:
-    time.sleep(refresh)
-    wp.set_bg(wp.group)
+lol = False
+if lol:
+    refresh = 0
+    try:
+        refresh = float(sys.argv[1])
+    except:
+        refresh = 5
+    while 1:
+        time.sleep(refresh)
+        wp.set_bg(wp.group)
